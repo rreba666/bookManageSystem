@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图书管理系统</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary-color: #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color: #4fc3a1;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --danger-color: #e74c3c;
+      --warning-color: #f39c12;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: var(--dark-color);
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg,
+          var(--primary-color),
+          var(--secondary-color));
+      color: white;
+      padding: 25px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo i {
+      font-size: 2.2rem;
+    }
+
+    .book-count {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 1rem;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #eee;
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .price-input {
+      position: relative;
+    }
+
+    .price-input::before {
+      content: '¥';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .price-input input {
+      padding-left: 30px;
+    }
+
+    .file-input-container {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-container input[type='file'] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: #f0f4f8;
+      border: 2px dashed #c1c9d2;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      text-align: center;
+      color: #666;
+      transition: all 0.3s;
+    }
+
+    .file-input-btn:hover {
+      background-color: #e8eef4;
+      border-color: var(--primary-color);
+    }
+
+    .file-input-btn i {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .file-name {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 14px 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background-color: #3db08d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-delete {
+      background-color: var(--danger-color);
+      padding: 8px 15px;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-search {
+      background-color: var(--primary-color);
+      padding: 12px 20px;
+    }
+
+    .btn-search:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-page {
+      background-color: #f1f5f9;
+      color: var(--dark-color);
+      padding: 10px 15px;
+      font-weight: normal;
+    }
+
+    .btn-page:hover {
+      background-color: #e2e8f0;
+    }
+
+    .btn-page.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-page:disabled {
+      background-color: #e9ecef;
+      color: #adb5bd;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-page:disabled:hover {
+      background-color: #e9ecef;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .empty-list {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+    }
+
+    .empty-list i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    .book-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .book-item {
+      display: flex;
+      border: 1px solid #eee;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fdfdfd;
+      transition: all 0.3s;
+    }
+
+    .book-item:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      transform: translateY(-3px);
+    }
+
+    .book-cover {
+      width: 100px;
+      height: 140px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-right: 20px;
+      flex-shrink: 0;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+    }
+
+    .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .book-info {
+      flex-grow: 1;
+    }
+
+    .book-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark-color);
+    }
+
+    .book-price {
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .book-description {
+      color: #666;
+      margin-bottom: 15px;
+      line-height: 1.5;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+
+    .book-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .book-added {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    /* 搜索区域样式 */
+    .search-section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background-color: #f8fafc;
+      border-radius: var(--border-radius);
+    }
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+    }
+
+    .search-options {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .search-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-option label {
+      margin-bottom: 0;
+      font-weight: normal;
+      color: #666;
+    }
+
+    .search-option select {
+      width: auto;
+      padding: 8px 12px;
+    }
+
+    .search-option input[type='number'] {
+      width: 100px;
+      padding: 8px 12px;
+    }
+
+    .search-stats {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* 分页样式 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .pagination-info {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .page-size-selector {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-size-selector select {
+      width: auto;
+      padding: 8px 12px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* 高亮搜索结果 */
+    .highlight {
+      background-color: #fff9c4;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-book"></i>
+          <h1>图书管理系统</h1>
+        </div>
+        <div class="book-count"><span id="total-books">0</span> 本图书</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <!-- 添加图书表单 -->
+      <section>
+        <div class="card">
+          <h2><i class="fas fa-plus-circle"></i> 添加新图书</h2>
+
+          <div id="add-book-form">
+            <div class="form-group">
+              <label for="book-title">图书名称 *</label>
+              <input type="text" id="book-title" placeholder="请输入图书名称" required />
+            </div>
+
+            <div class="form-group price-input">
+              <label for="book-price">价格 (元) *</label>
+              <input type="number" id="book-price" placeholder="0.00" min="0" step="0.01" required />
+            </div>
+
+            <div class="form-group">
+              <label for="book-price">分类</label>
+              <select id='book-category'>
+                <option value="1">历史</option>
+                <option value="2">笑话</option>
+                <option value="3">前端</option>
+                <option value="4">美食</option>
+                <option value="" selected>暂无分类</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="book-description">图书介绍</label>
+              <textarea id="book-description" placeholder="请输入图书简介、作者等信息"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="book-cover">图书封面</label>
+              <div class="file-input-container">
+                <div class="file-input-btn">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>点击选择封面图片</span>
+                </div>
+                <input type="file" id="book-cover" accept="image/*" />
+              </div>
+              <div class="file-name" id="file-name">未选择文件</div>
+            </div>
+
+            <button class="btn" id="addBook">
+              <i class="fas fa-save"></i> 添加图书
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 图书列表 -->
+      <section>
+
+
+        <div class="search-section">
+          <h3><i class="fas fa-search"></i> 搜索图书</h3>
+          <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索图书名称或介绍..." value="">
+            <button type="button" class="btn btn-search" id="search-button">
+              <i class="fas fa-search"></i> 搜索
+            </button>
+          </div>
+
+          <div class="search-options">
+            <div class="search-option">
+              <label for="sort-by">排序方式：</label>
+              <select id="sort-by">
+                <option value="date-desc">按添加时间(最新)</option>
+                <option value="date-asc">按添加时间(最早)</option>
+                <option value="title-asc">按书名(A-Z)</option>
+                <option value="title-desc">按书名(Z-A)</option>
+                <option value="price-asc">按价格(低到高)</option>
+                <option value="price-desc">按价格(高到低)</option>
+              </select>
+            </div>
+
+            <div class="search-option">
+              <label for="price-min">价格范围：</label>
+              <input type="number" id="price-min" placeholder="最低价" min="0" step="0.01" value="50">
+              <span> - </span>
+              <input type="number" id="price-max" placeholder="最高价" min="0" step="0.01" value="150">
+              <button id="searchPriceBtn" class="btn">搜索</button>
+            </div>
+
+            <div class="search-option">
+              <label for="date-from">添加时间：</label>
+              <input type="date" id="date-from" value="2026-01-01">
+              <span> 至 </span>
+              <input type="date" id="date-to" value="2026-03-17">
+              <button id="searchTimeBtn" class="btn">搜索</button>
+            </div>
+          </div>
+
+          <div class="search-stats">
+            <span id="search-results-count">找到 2 本图书 (共 12 本)
+              <span style="color: #4a6fa5; font-weight: bold">
+                (已应用筛选条件)</span></span>
+            <button type="button" id="clear-search" class="btn btn-page" style="margin-left: 15px; padding: 5px 10px">
+              <i class="fas fa-times"></i> 清除筛选
+            </button>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <h2><i class="fas fa-list"></i> 图书列表</h2>
+
+
+          <div class="book-list" id="book-list-container">
+
+            <!-- <div class="book-item" data-id="book_1">
+              <div class="book-cover">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="book-info">
+                <h3 class="book-title">JavaScript高级程序设计</h3>
+                <div class="book-price">¥128.00</div>
+                <p class="book-description">
+                  本书是JavaScript领域经典的参考书，全面介绍了JavaScript开发者必须掌握的前端开发技术，涉及JavaScript的基础特性和高级特性。
+                </p>
+                <div class="book-actions">
+                  <div class="book-added">添加于 2026-02-10</div>
+                  <button class="btn btn-delete" onclick="deleteBook('book_1')">
+                    <i class="fas fa-trash"></i> 删除
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div> -->
+            <!-- 图书列表会动态加载到这里 -->
+            <div class="empty-list" id="empty-list-message">
+              <i class="fas fa-book-open"></i>
+              <p>还没有添加任何图书</p>
+              <p>请使用左侧表单添加您的第一本图书</p>
+            </div>
+          </div>
+          <button id='lastPage' disabled>上一页</button>
+          <span id="pageCount"></span>
+          <button id='nextPage'>下一页</button>
+          <span>每页显示：</span>
+          <input type="number" id="pageSizeInput" value="2" min="1" style="width: 60px ;height: 20px;">
+          <span>条</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 通知消息 -->
+  <div class="notification" id="notification"></div>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.13.6/dist/axios.min.js"></script>
+  <script src="../utils/debounce.js"></script>
+  <script>
+    console.log('🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰🌰');
+    let bookData = []
+    let allBookData = []
+    let bookCate = []
+    // 当前页数
+    let page = 1
+    // 总页数
+    let totalPages = 1
+    // 每页条数
+    let pageSize = 2
+    // 总记录数
+    let totalTaks
+    //筛选的图书数量
+    let searchBooks = 0
+    // 保存关键字
+    let Keyword = ''
+    // 通知消息
+    const notification = document.getElementById('notification')
+    // 书籍数量元素
+    let bookNumEle = document.querySelector('#total-books')
+    // 空列表提示
+    let nullEle = document.querySelector('.empty-list')
+    // 添加按钮
+    let addBtnEle = document.getElementById('addBook')
+    // 删除按钮
+    let dleBtnELe = document.querySelector('.btn-delete')
+    // 图书总列表对象
+    let bookListEle = document.getElementById('book-list-container')
+    // 图书标题
+    let inputBookTitleEle = document.getElementById('book-title')
+    // 图书价格
+    let inputBookPriceEle = document.getElementById('book-price')
+    // 图书分类
+    let inputBookCategoryEle = document.getElementById('book-category')
+    // 图书介绍
+    let inputBookTextEle = document.getElementById('book-description')
+    // 图书封面
+    let inputBookImgEle = document.getElementById('book-cover')
+    // 上传文件文字提示
+    let fileNameSpan = document.getElementById('file-name');
+    // 上一页按钮
+    let lastPageBtnEle = document.getElementById('lastPage')
+    // 下一页按钮
+    let nextPageBtnEle = document.getElementById('nextPage')
+    // 页数统计
+    let pageCountEle = document.getElementById('pageCount')
+    // 每页显示条数
+    let pageSizeInputEle = document.getElementById('pageSizeInput')
+    // 筛选图书总数
+    let searchResultsCountELe = document.getElementById('search-results-count')
+    // 搜索筛选图书
+    let searchInputEle = document.getElementById('search-input')
+    // 搜索按钮
+    let searchButtonEle = document.getElementById('search-button')
+    // 清除筛选按钮
+    let clearSearchEle = document.getElementById('clear-search')
+    //选择排序方式
+    let sortByEle = document.getElementById('sort-by')
+    // 最低价
+    let priceMinEle = document.getElementById('price-min')
+    // 最高价
+    let priceMaxEle = document.getElementById('price-max')
+    // 价格范围搜索按钮
+    let searchPriceBtn = document.getElementById('searchPriceBtn')
+    // 起始时间
+    let dateFromEle = document.getElementById('date-from')
+    // 结束时间
+    let dateToEle = document.getElementById('date-to')
+    // 时间范围搜素按钮
+    let searchTimeBtn = document.getElementById('searchTimeBtn')
+
+
+
+    // 条数输入框失焦事件(用防抖包装)
+    pageSizeInputEle.addEventListener('change', debounce(function () {
+      let newSize = parseInt(this.value)
+      if (newSize > 0) {
+        pageSize = newSize
+        loadTasksFromServer(1)
+      } else {
+        alert('请选择一个有效的值')
+        return
+      }
+    }), 700)
+
+    // 图片验证
+    inputBookImgEle.addEventListener('change', function () {
+      let allType = ['image/png', 'image/jpeg', 'image/jpg']
+      if (!allType.includes(this.files[0].type)) {
+        alert('文件格式错误,允许的格式为png,jpeg,jpg')
+        this.value = '';
+        return
+      }
+      fileNameSpan.textContent = this.files[0] ? this.files[0].name : '未选择文件';
+    });
+
+    // 加载服务器数据
+    async function loadTasksFromServer() {
+      try {
+        let { data } = await axios({
+          method: 'GET',
+          url: 'http://localhost:3000/allTasks',
+          params: {
+            page: page,
+            pageSize: pageSize,
+            keyword: Keyword
+          }
+        })
+
+        if (data.code === 20000) {
+          // 需要渲染的数据
+
+          bookData = data.data
+          console.log(bookData)
+          // 另存一份不受影响的原数据
+          allBookData = data.data
+          totalTaks = data.totalCount
+          totalPages = Math.ceil(data.searchCount / pageSize)
+          bookCate = data.cateCount
+          console.log(bookCate);
+
+          pageCountEle.innerText = `页数${page}/${totalPages}`
+          renderBookData()
+          renderBookNum()
+          renderBookCate()
+
+        } else {
+          alert('加载失败：' + data.msg)
+        }
+      }
+      catch (err) {
+        alert('加载失败：' + err)
+      }
+
+    }
+
+    // 加载页面
+    document.addEventListener('DOMContentLoaded', function () {
+      loadTasksFromServer()
+    })
+
+    // 更新按钮状态
+    function updatePagination() {
+      lastPageBtnEle.disabled = page <= 1
+      nextPageBtnEle.disabled = page >= totalPages
+    }
+
+    // 下一页事件
+    nextPageBtnEle.addEventListener('click', () => {
+      if (page < totalPages) {
+        page++
+        loadTasksFromServer()
+        updatePagination()
+      }
+    })
+
+    // 上一页事件
+    lastPageBtnEle.addEventListener('click', () => {
+      if (page > 1) {
+        page--
+        loadTasksFromServer()
+        updatePagination()
+      }
+    })
+
+    // 渲染数据
+    function renderBookData() {
+
+      if (bookData.length === 0) {
+        nullEle.style.display = 'block'
+        bookListEle.innerHTML = '';
+        bookListEle.appendChild(nullEle);
+        return;
+      }
+      nullEle.style.display = 'none'
+
+      let liHtml = ''
+      bookData.forEach(book => {
+        let timestamp = book.date
+        let date = new Date(timestamp * 1000);
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let hour = date.getHours()
+        let min = date.getMinutes()
+        let second = date.getSeconds()
+
+        // 需要高亮的元素
+        let titleDisplay = book.title
+        let textDisplay = book.text
+
+        if (Keyword) {
+          let reg = new RegExp(Keyword, 'gi')
+          titleDisplay = book.title.replace(reg, `<span class="highlight">$&</span>`)
+          textDisplay = book.text.replace(reg, `<span class="highlight">$&</span>`)
+        }
+
+        liHtml += `
+        <div class="book-item" data-id="book_2">
+                  <div class="book-cover">
+                      <img src="http://localhost:3000${book.img}" alt="" srcset="">
+                  </div>
+                  <div class="book-info"> 
+                    <h3 class="book-title"><span id="${book.books_id}">${titleDisplay}</span></h3>
+                    <div class="book-price">¥${book.price}</div>
+                    <p class="book-description">
+                      ${textDisplay}
+                    </p>
+                    <div class="book-actions">
+                      <div class="book-added">添加于${year}/${month}/${day} ${hour}:${min}:${second}</div>
+                      <div class="book-added">分类:${book.cate_name || '暂无分类'}</div>
+                      <button class="btn btn-delete" onclick="deleteBook('${book.books_id}')">
+                        <i class="fas fa-trash"></i> 删除
+                      </button>
+                    </div>
+                  </div>
+        </div>
+      `
+        bookListEle.innerHTML = liHtml
+      })
+    }
+
+    // 渲染书籍数量
+    function renderBookNum() {
+      bookNumEle.textContent = totalTaks
+      searchResultsCountELe.innerHTML = `
+     <span id="search-results-count">
+      找到 ${searchBooks || bookData.length} 本图书 (共${totalTaks}本)
+          <span style="color: #4a6fa5; font-weight: bold">(已应用筛选条件)</span>
+    </span>`
+    }
+
+    // 渲染分类
+    function renderBookCate() {
+      if (bookCate.length == 0) {
+        console.log('分类为空');
+      }
+      let html = ''
+      bookCate.forEach(cate => {
+        html += `
+                <option value="${cate.cate_id}">${cate.cate_name}</option>`
+      })
+      inputBookCategoryEle.innerHTML = html + `<option value=""selected>暂无分类</option>`
+    }
+
+    // 添加
+    addBtnEle.addEventListener('click', async function () {
+      event.preventDefault();
+      const file = inputBookImgEle.files[0]
+      const formData = new FormData();
+      formData.append('img', file)
+      formData.append('title', inputBookTitleEle.value)
+      formData.append('price', inputBookPriceEle.value)
+      formData.append('text', inputBookTextEle.value)
+      formData.append('cate_id', inputBookCategoryEle.value)
+      try {
+        let { data } = await axios({
+          method: 'POST',
+          url: 'http://localhost:3000/addTask',
+          data: formData
+        })
+
+        if (data.code === 20000) {
+          showNotification('添加成功');
+          loadTasksFromServer();
+          inputBookTitleEle.value = '';
+          inputBookPriceEle.value = '';
+          inputBookTextEle.value = '';
+          inputBookImgEle.value = '';
+          document.getElementById('file-name').textContent = '未选择文件';
+          console.log(data);
+        }
+        if (data.code === 40001) {
+          alert(data.msg)
+        }
+      } catch (err) {
+        showNotification('添加失败：' + err.message, true);
+      }
+    })
+
+    // 删除
+    async function deleteBook(id) {
+      if (!confirm('确定要删除吗？')) {
+        return;
+      }
+      try {
+        let { data } = await axios({ method: 'DELETE', url: 'http://127.0.0.1:3000/delTask', params: { id } })
+        if (data.code === 20000) {
+          showNotification('删除成功')
+          loadTasksFromServer()
+        }
+      }
+      catch (err) {
+        showNotification('删除失败', true)
+        console.log(err);
+      }
+
+    }
+
+    // 搜索
+    searchButtonEle.addEventListener('click', function () {
+      let inputName = searchInputEle.value.trim()
+      Keyword = inputName
+      page = 1
+      loadTasksFromServer()
+    })
+
+    //清除筛选按钮
+    clearSearchEle.addEventListener('click', function () {
+      searchBooks = 0
+      // 重置关键词
+      Keyword = ''
+      // 清空搜索框
+      searchInputEle.value = ''
+      page = 1
+      loadTasksFromServer()
+    })
+
+    // 排序方式
+    sortByEle.addEventListener('change', async function () {
+      let str = sortByEle.value
+      let [field, sort] = str.split('-')
+      try {
+        let { data } = await axios({ method: 'GET', url: 'http://127.0.0.1:3000/sortTasks', params: { field, sort, page: 1, pageSize: pageSize } })
+        if (data.code === 20000) {
+          bookData = data.data
+          totalPages = Math.ceil(data.total / pageSize)
+          page = 1
+          pageCountEle.innerText = `页数${page}/${totalPages}`
+          // 手动调用，防止覆盖
+          renderBookData()
+          renderBookNum()
+          updatePagination()
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    })
+
+    // 统一价格范围
+    async function searchByPrice() {
+      let minPrice = Number(priceMinEle.value)
+      let maxPrice = Number(priceMaxEle.value)
+      if (minPrice > maxPrice) {
+        alert('最低价不能大于最高价')
+        priceMinEle.value = ''
+        return
+      }
+      try {
+        let { data } = await axios({ method: 'GET', url: 'http://127.0.0.1:3000/searchPrice', params: { minPrice, maxPrice } })
+        if (data.code === 20000) {
+          bookData = data.data
+          searchBooks = data.data.length
+          totalPages = Math.ceil(bookData.length / pageSize)
+          page = 1
+          pageCountEle.innerText = `页数${page}/${totalPages}`
+          // 手动渲染防止覆盖
+          renderBookData()
+          renderBookNum()
+        }
+      }
+      catch (e) {
+        alert('查找失败')
+        console.log(e);
+      }
+    }
+    // 套上防抖
+    let debouncedSearchByPrice = debounce(searchByPrice, 500)
+    //搜索按钮绑定
+    searchPriceBtn.addEventListener('click', debouncedSearchByPrice)
+
+    // 统一时间范围
+    async function searchByTime() {
+      let startTime = (new Date(dateFromEle.value).getTime()) / 1000
+      let endTime = (new Date(dateToEle.value).getTime()) / 1000
+      if (startTime > endTime) {
+        alert('起始日期不能大于结束日期')
+        dateFromEle.value = ''
+        return
+      }
+      try {
+        let { data } = await axios({ method: 'GET', url: 'http://127.0.0.1:3000/searchDate', params: { startTime, endTime } })
+        if (data.code === 20000) {
+          bookData = data.data
+          searchBooks = data.data.length
+          totalPages = Math.ceil(bookData.length / pageSize)
+          page = 1
+          pageCountEle.innerText = `页数${page}/${totalPages}`
+          // 手动渲染防止覆盖
+          renderBookData()
+          renderBookNum()
+          updatePagination()
+        }
+      }
+      catch (e) {
+        alert('查找失败')
+        console.log(e);
+      }
+    }
+    // 套上防抖
+    let debouncedSearchByTime = debounce(searchByTime, 500)
+    // 时间搜素按钮绑定
+    searchTimeBtn.addEventListener('click', debouncedSearchByTime)
+
+    // 显示通知消息
+    function showNotification(message, isError = false) {
+      notification.textContent = message
+      notification.style.backgroundColor = isError ? '#e74c3c' : '#4fc3a1'
+      notification.style.display = 'block'
+
+      setTimeout(() => {
+        notification.style.display = 'none'
+      }, 3000)
+    }
+
+  </script>
+</body>
+
+</html>
