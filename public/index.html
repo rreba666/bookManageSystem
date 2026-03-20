@@ -872,7 +872,7 @@
                     </p>
                     <div class="book-actions">
                       <div class="book-added">添加于${year}/${month}/${day} ${hour}:${min}:${second}</div>
-                      <div class="book-added">分类:${book.cate_name || '暂无分类'}</div>
+                      <div class="book-added">分类:${book.category?.cate_name || '暂无分类'}</div>
                       <button class="btn btn-delete" onclick="deleteBook('${book.books_id}')">
                         <i class="fas fa-trash"></i> 删除
                       </button>
