@@ -6,7 +6,6 @@ if (!fs.existsSync('upload')) {
     fs.mkdirSync('upload')
 }
 
-// 就是你原来用的配置
 const upload = multer({ dest: 'upload/' })
 
 export default upload
